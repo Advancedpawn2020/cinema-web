@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="license">
   </a>
   <a href="https://github.com/Advancedpawn2020/cinema-web/releases">
-    <img src="https://img.shields.io/github/release/lin-xin/vue-manage-system.svg" alt="GitHub release">
+    <img src="https://img.shields.io/github/release/Advancedpawn2020/cinema-web.svg" alt="GitHub release">
   </a>
 
 本项目是电影院会员管理系统的web端，是基于Vue + Element UI 的后台管理系统解决方案的一个应用。[vue-manage-system项目地址](https://lin-xin.gitee.io/example/work/)
