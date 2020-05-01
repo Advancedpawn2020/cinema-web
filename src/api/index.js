@@ -215,3 +215,27 @@ export const getCardByCardId = query=>{
         params:query
     });
 };
+//获取充值消费数据的图标数据，请求参数无，返回包含三个整型数组的对象
+export const getSchart1Data = query=>{
+    return request({
+        url:"getSchart1Data",
+        method:'post',
+        params:query
+    });
+};
+//获取业务增长的图标数据，请求参数无，返回包含三个整型数组的对象：memberNum,cardNum,movieNum
+export const getSchart2Data = query=>{
+    return request({
+        url:"getSchart2Data",
+        method:'post',
+        params:query
+    });
+};
+//获取比例的图标数据，请求参数无，返回三者的比例对象
+export const getSchart3Data = query=>{
+    return request({
+        url:"getSchart3Data",
+        method:'post',
+        params:query
+    });
+};

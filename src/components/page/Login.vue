@@ -21,7 +21,7 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 默认managerId为admin，密码为123123。</p>
+                <p class="login-tips">Tips : 默认账号为admin，密码为123123。</p>
             </el-form>
         </div>
     </div>
@@ -90,7 +90,7 @@
     line-height: 50px;
     text-align: center;
     font-size: 20px;
-    color: #fff;
+    color: #000000;
     border-bottom: 1px solid #ddd;
 }
 .ms-login {
@@ -117,6 +117,6 @@
 .login-tips {
     font-size: 12px;
     line-height: 30px;
-    color: #fff;
+    color: #000000;
 }
 </style>

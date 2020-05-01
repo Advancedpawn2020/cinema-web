@@ -54,7 +54,7 @@ const i18n = new VueI18n({
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | vue-manage-system`;
+    document.title = `${to.meta.title} | cinema`;
     //localStorage主要是用来作为本地存储来使用的，其中的setItem可以设置一个map值（在Login.vue中设置的值）
     //getItem可以从浏览器拿到数组，这里拿到用户名
     //逻辑：当用户名没取到，且当前要跳转的组件不是login，则跳转到login

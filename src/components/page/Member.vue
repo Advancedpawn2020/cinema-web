@@ -224,8 +224,16 @@
         },
         created() {
             this.getMemberData();
+            this.openNotify();
         },
         methods: {
+            openNotify() {
+                this.$notify({
+                    title: '提示',
+                    message: '本demo所有会员密码为123123',
+                    duration: 0
+                });
+            },
             // 开发时，获取 easy-mock 的模拟数据
             // 将query数据作为参数传递给fetchData，在then后面的回调函数中操作数据
             getMemberData() {

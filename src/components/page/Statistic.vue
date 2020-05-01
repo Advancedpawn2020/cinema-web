@@ -10,15 +10,7 @@
         <div class="container">
             <div class="schart-box">
                 <div class="content-title">最近一周消费充值数据</div>
-                <schart class="schart" canvasId="bar" :options="options1"></schart>
-            </div>
-            <div class="schart-box">
-                <div class="content-title">最近一周会员增长趋势</div>
-                <schart class="schart" canvasId="line" :options="options2"></schart>
-            </div>
-            <div class="schart-box">
-                <div class="content-title">会员充值消费积分比例</div>
-                <schart class="schart" canvasId="ring" :options="options4"></schart>
+                <schart v-if="loading" class="schart" canvasId="bar" :options="options1"></schart>
             </div>
         </div>
     </div>
@@ -26,6 +18,10 @@
 
 <script>
 import Schart from 'vue-schart';
+import {getSchart1Data} from "../../api/index";
+import {getSchart2Data} from "../../api/index";
+import {getSchart3Data} from "../../api/index";
+
 export default {
     name: 'basecharts',
     components: {
@@ -33,86 +29,48 @@ export default {
     },
     data() {
         return {
+            loading:false,
             options1: {
                 type: 'bar',
                 title: {
-                    text: '最近一周各品类销售图'
+                    text: '最近一周消费充值数据'
                 },
                 bgColor: '#fbfbfb',
                 labels: ['周一', '周二', '周三', '周四', '周五'],
                 datasets: [
                     {
-                        label: '家电',
+                        label: '人民币消费',
                         fillColor: 'rgba(241, 49, 74, 0.5)',
-                        data: [234, 278, 270, 190, 230]
+                        data: []
                     },
                     {
-                        label: '百货',
-                        data: [164, 178, 190, 135, 160]
+                        label: '充值',
+                        data: []
                     },
                     {
-                        label: '食品',
-                        data: [144, 198, 150, 235, 120]
-                    }
-                ]
-            },
-            options2: {
-                type: 'line',
-                title: {
-                    text: '最近几个月各品类销售趋势图'
-                },
-                bgColor: '#fbfbfb',
-                labels: ['6月', '7月', '8月', '9月', '10月'],
-                datasets: [
-                    {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
-                    },
-                    {
-                        label: '百货',
-                        data: [164, 178, 150, 135, 160]
-                    },
-                    {
-                        label: '食品',
-                        data: [114, 138, 200, 235, 190]
-                    }
-                ]
-            },
-            options3: {
-                type: 'pie',
-                title: {
-                    text: '服装品类销售饼状图'
-                },
-                legend: {
-                    position: 'left'
-                },
-                bgColor: '#fbfbfb',
-                labels: ['T恤', '牛仔裤', '连衣裙', '毛衣', '七分裤', '短裙', '羽绒服'],
-                datasets: [
-                    {
-                        data: [334, 278, 190, 235, 260, 200, 141]
-                    }
-                ]
-            },
-            options4: {
-                type: 'ring',
-                title: {
-                    text: '环形三等分'
-                },
-                showValue: false,
-                legend: {
-                    position: 'bottom',
-                    bottom: 40
-                },
-                bgColor: '#fbfbfb',
-                labels: ['vue', 'react', 'angular'],
-                datasets: [
-                    {
-                        data: [500, 500, 500]
+                        label: '积分兑换',
+                        data: []
                     }
                 ]
             }
+
         };
+
+    },
+    created() {
+        this.schart1Data();
+    },
+    methods:{
+        schart1Data(){
+            getSchart1Data().then(res=>{
+                if(res.status==200){
+                    this.options1.datasets[0].data=res.data.consume;
+                    this.options1.datasets[1].data=res.data.recharge;
+                    this.options1.datasets[2].data=res.data.integral;
+                    this.loading=true;
+                }
+            })
+        },
     }
 };
 </script>

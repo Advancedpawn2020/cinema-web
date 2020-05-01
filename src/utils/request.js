@@ -39,7 +39,9 @@ const service = axios.create({
         nginx就类似于这个浏览器，它接收到外部对它的请求（ 注意，nginx只会接收别人对它的请求，而不会拦截浏览器的请求 ），再类似浏览器地址栏一样去请求某个接口。最后将请求到的内容返回回去
     * */
 
-    baseURL:'/api',
+    //开发环境中前后端分离有跨域问题，需要使用到baseURL来跳转到js代理服务器，生产环境中不使用单独的WEB服务器的情况下，注释掉这一行
+    // baseURL:'/api',
+    baseURL:'http://localhost:8080',
     timeout: 5000
 });
 
