@@ -40,8 +40,9 @@ const service = axios.create({
     * */
 
     //开发环境中前后端分离有跨域问题，需要使用到baseURL来跳转到js代理服务器，生产环境中不使用单独的WEB服务器的情况下，注释掉这一行
-    // baseURL:'/api',
-    baseURL:'http://localhost:8080',
+    baseURL:'/api',
+    //当部署到服务器，或者内网穿透，不是本机访问时，需要将baseURL改为外网域名地址。当本地访问时，需要该为localhost:8080
+    // baseURL:'http://wechat.zrkworld.com',
     timeout: 5000
 });
 

@@ -60,8 +60,9 @@ npm run build
 * main.js：核心Vue实例的位置，是脚手架中默认启动的入口，是整个应用的核心
 
 ## 其他注意事项
-针对于本项目的具体修改过程，可参考[vue-manage-system项目地址](https://lin-xin.gitee.io/example/work/)
-
+* 针对于本项目的具体修改过程，可参考[vue-manage-system项目地址](https://lin-xin.gitee.io/example/work/)
+* 使用本前端项目进行前后端分离开发时，需要解决跨域问题，在utils/request.js中将baseURL设置为/api，并在vue.config.js中设置/api所映射的路径，
+以期使用node的代理服务器解决跨域问题（如使用默认设置，请将cinema后端项目的端口设置为8081，路径设置为/cinema）
 
 ## License
 

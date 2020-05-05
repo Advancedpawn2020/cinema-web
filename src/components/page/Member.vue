@@ -33,10 +33,10 @@
                     <el-option key="3" label="十天内过生日" value="10"></el-option>
                 </el-select>
                 <el-input v-model="query.name" clearable placeholder="会员名称查询" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">查询</el-button>
+                <a href="javascript:;" @click="handleSearch">查询</a>
                 <el-button type="danger"
                            icon="el-icon-delete"
-                           @click="delAllSelection()"
+                           @click="delAllSelection()" style="float:right"
                 >删除所选会员
                 </el-button>
             </div>
@@ -419,12 +419,24 @@
     }
 
     .handle-select {
+
         width: 150px;
+        position:absolute;
+        top: 20.5%;
+        left: 21.5%;
+        transform: translate(-50%, -50%);
+        /*设置元素不被后面元素覆盖*/
+        z-index: 1;
     }
 
     .handle-input {
         width: 150px;
         display: inline-block;
+        position:absolute;
+        top: 20.5%;
+        left: 36.5%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
     }
 
     .table {
@@ -445,5 +457,44 @@
         margin: auto;
         width: 40px;
         height: 40px;
+    }
+    a{
+        text-decoration: none;/*why set text-decoration as none?*/
+        position:absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);/*translate the button self*/
+        font-size: 24px;
+        background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+        background-size: 400%;
+        width: 100px;
+        height: 50px;
+        line-height: 50px;/*this means the height the text self */
+        text-align: center;
+        color: #fff;
+        text-transform: capitalize;
+        border-radius: 5px;/*make the profile round*/
+        z-index: 1;
+    }
+    a::before{
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+        background-size: 400%;
+        border-radius: 50px;
+        filter: blur(20px);
+        z-index: -1;
+    }
+    a:hover::before, a:hover{
+        animation: sun 8s infinite;
+    }
+    @keyframes sun{
+        100%{
+            background-position: -400% 0;
+        }
     }
 </style>
