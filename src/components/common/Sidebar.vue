@@ -1,7 +1,3 @@
-<!--侧边栏组件
-侧边栏是操作员进行操作的，用户无法看到，也不会点击
-用户只会看到会员界面和会员卡界面
--->
 <template>
     <div class="sidebar">
         <el-menu
@@ -82,8 +78,53 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-people',
-                    index: 'table',
-                    title: '会员页面'
+                    index: 'member',
+                    title: '会员管理',
+                    subs: [
+                        {
+                            index: 'member',
+                            title: '会员列表'
+                        }
+                        ]
+                },
+                {
+                    icon: 'el-icon-lx-copy',
+                    index: 'card',
+                    title: '会员卡管理',
+                    subs: [
+                        {
+                            index: 'card',
+                            title: '会员卡列表'
+                        },
+                        {
+                            index: 'recharge',
+                            title: '充值管理'
+                        },
+                        {
+                            index: 'consume',
+                            title: '消费管理'
+                        },
+                        {
+                            index: 'record',
+                            title: '交易记录'
+                        }
+                    ]
+                },
+                {
+                    icon: 'el-icon-lx-cascades',
+                    index: 'integral',
+                    title: '积分管理',
+                    subs: [
+                        {
+                            index: 'integral',
+                            title: '积分列表'
+                        }
+                    ]
+                },
+                {
+                    icon: 'el-icon-lx-calendar',
+                    index: 'care',
+                    title: '会员关怀'
                 },
                 {
                     icon: 'el-icon-pie-chart',

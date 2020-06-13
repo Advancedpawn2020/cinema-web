@@ -26,16 +26,6 @@
                         @click="memberVisible = true"
                 >会员选择
                 </el-button>
-                <el-button
-                        type="primary"
-                        icon="el-icon-bank-card"
-                        class="handle-del mr10"
-                        @click="handleRegister"
-                >会员卡注册
-                </el-button>
-                <el-button type="primary" icon="el-icon-search" @click="handleDealSearch">交易记录查询</el-button>
-                <el-button type="success" icon="el-icon-present" @click="handleIntegralExchange">积分兑换</el-button>
-
                 <span v-if="isBirthday" class="birthday">
                       <el-tag
                               type="danger"
@@ -107,39 +97,15 @@
                         -->
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="500px" align="center">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button
-                                type="primary"
 
-                                @click="handleRecharge(scope.$index, scope.row)"
-                                :disabled="scope.row.lose!==0"
-                        >充值
-                        </el-button>
                         <el-button
                                 type="primary"
                                 v-if="scope.row.balance>0"
                                 @click="handleConsume(scope.$index, scope.row)"
                                 :disabled="scope.row.lose!==0"
                         >消费
-                        </el-button>
-                        <el-button
-                                type="warning"
-                                v-if="scope.row.lose===0"
-                                @click="handleLoss(scope.$index, scope.row)"
-                        >挂失
-                        </el-button>
-                        <!--点击时传递当前行索引和数据给函数，并在函数中赋值给form等数据，
-                        并将编辑框显示-->
-                        <el-button type="danger"
-                                   v-if="scope.row.lose===1"
-                                   @click="handleCancel(scope.$index, scope.row)"
-                        >解挂
-                        </el-button>
-                        <el-button type="danger"
-                                   v-if="scope.row.lose===1"
-                                   @click="handleReissue(scope.$index, scope.row)"
-                        >补卡
                         </el-button>
                     </template>
                 </el-table-column>
@@ -157,64 +123,6 @@
             </div>
         </div>
 
-        <!-- 会员卡注册弹出框 -->
-        <el-dialog title="会员卡注册" :visible.sync="registerVisible" width="30%">
-            将开通新的会员卡，是否确定？
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="registerVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveRegister">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!-- 交易记录表格弹出框 -->
-        <el-dialog title="交易记录查询" :visible.sync="recordVisible" width="80%">
-            <el-table :data="recordData" border>
-                <el-table-column prop="cardId" label="会员卡ID" align="center"></el-table-column>
-                <el-table-column prop="spendType" label="交易类型" align="center">
-                    <template slot-scope="scope">
-                        <el-tag
-                                :type="scope.row.spendType===0?'success':'danger'"
-                        >{{scope.row.spendType===0?'人民币':'积分'}}
-                        </el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="value" label="金额" align="center">
-                    <template slot-scope="scope">
-                        {{scope.row.value>0?'+'+scope.row.value:scope.row.value}}
-
-                    </template>
-                </el-table-column>
-                <el-table-column prop="time" label="时间" align="center"></el-table-column>
-            </el-table>
-            <!--底部的分页区域-->
-            <div class="pagination">
-                <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.pageIndex"
-                        :page-size="query.pageSize"
-                        :total="pageTotal"
-                        @current-change="handleRecordPageChange"
-                ></el-pagination>
-            </div>
-            i
-        </el-dialog>
-        <!--充值-->
-        <el-dialog title="充值" :visible.sync="rechargeVisible" width="30%">
-            <el-form ref="form" :model="form" :rules="rules" label-width="70px">
-                <el-form-item label="卡号" disabled="true" prop="cardId">
-                    <el-input v-model="form.cardId"></el-input>
-                </el-form-item>
-
-                <el-form-item label="额度" prop="value">
-                    <el-input v-model="form.value"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="rechargeVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveRecharge">确 定</el-button>
-            </span>
-        </el-dialog>
         <!--消费，为了给选择器选择时传递多个值，用@change来改变-->
         <el-dialog title="消费" :visible.sync="consumeVisible" width="35%">
             <el-form :model="form" :label-position="labelPosition" label-width="80px" :rules="rules">
@@ -250,41 +158,7 @@
             </span>
         </el-dialog>
 
-        <!--积分兑换对话框-->
-        <el-dialog title="积分兑换" :visible.sync="integralExchangeVisible">
-            <el-form :rules="rules">
-                <el-form-item label="总积分">
-                    {{this.integralTotal}}
-                </el-form-item>
-
-                <el-transfer
-                        style="text-align: left; display: inline-block"
-                        v-model="pickIntegral"
-                        filterable
-                        :left-default-checked="[1]"
-                        :titles="['可选礼物', '已选礼物']"
-                        :button-texts="['放回', '选入']"
-                        :format="{
-        noChecked: '${total}',
-        hasChecked: '${checked}/${total}'
-      }"
-                        @change="handleChange"
-                        :data="integralExchange">
-                    <!--                        <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>-->
-                    <!--                        <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>-->
-                </el-transfer>
-
-                <el-form-item label="花费积分">
-                    {{consumeIntegral}}
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="integralExchangeVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveIntegralExchange" :disabled="beyondLimit">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <el-dialog title="会员选择" show-close="false" close-on-press-escape="false" :visible.sync="memberVisible" >
+        <el-dialog title="会员选择" :visible.sync="memberVisible">
             <el-table
                     :data="memberData"
                     border

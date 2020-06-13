@@ -26,16 +26,6 @@
                         @click="memberVisible = true"
                 >会员选择
                 </el-button>
-                <el-button
-                        type="primary"
-                        icon="el-icon-bank-card"
-                        class="handle-del mr10"
-                        @click="handleRegister"
-                >会员卡注册
-                </el-button>
-                <el-button type="primary" icon="el-icon-search" @click="handleDealSearch">交易记录查询</el-button>
-                <el-button type="success" icon="el-icon-present" @click="handleIntegralExchange">积分兑换</el-button>
-
                 <span v-if="isBirthday" class="birthday">
                       <el-tag
                               type="danger"
@@ -44,6 +34,7 @@
                       </el-tag>
 
                 </span>
+                <a href="javascript:;" @click="handleIntegralExchange">积分兑换</a>
 
                 <!--需求:模糊搜索,输入一个关键字弹出所有含有关键字的列表
                     实现:elementui的远程搜索实现,原先的做法是按照官网那样,聚焦时拿到全部数据放到数组,
@@ -67,7 +58,6 @@
                 <!--trigger-on-focus 是否在输入框 focus 时显示建议列表-->
 
             </div>
-            <!--绑定memberData变量-->
             <el-table
                     :data="cardData"
                     border
@@ -107,42 +97,6 @@
                         -->
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="500px" align="center">
-                    <template slot-scope="scope">
-                        <el-button
-                                type="primary"
-
-                                @click="handleRecharge(scope.$index, scope.row)"
-                                :disabled="scope.row.lose!==0"
-                        >充值
-                        </el-button>
-                        <el-button
-                                type="primary"
-                                v-if="scope.row.balance>0"
-                                @click="handleConsume(scope.$index, scope.row)"
-                                :disabled="scope.row.lose!==0"
-                        >消费
-                        </el-button>
-                        <el-button
-                                type="warning"
-                                v-if="scope.row.lose===0"
-                                @click="handleLoss(scope.$index, scope.row)"
-                        >挂失
-                        </el-button>
-                        <!--点击时传递当前行索引和数据给函数，并在函数中赋值给form等数据，
-                        并将编辑框显示-->
-                        <el-button type="danger"
-                                   v-if="scope.row.lose===1"
-                                   @click="handleCancel(scope.$index, scope.row)"
-                        >解挂
-                        </el-button>
-                        <el-button type="danger"
-                                   v-if="scope.row.lose===1"
-                                   @click="handleReissue(scope.$index, scope.row)"
-                        >补卡
-                        </el-button>
-                    </template>
-                </el-table-column>
             </el-table>
             <!--底部的分页区域-->
             <div class="pagination">
@@ -156,99 +110,6 @@
                 ></el-pagination>
             </div>
         </div>
-
-        <!-- 会员卡注册弹出框 -->
-        <el-dialog title="会员卡注册" :visible.sync="registerVisible" width="30%">
-            将开通新的会员卡，是否确定？
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="registerVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveRegister">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!-- 交易记录表格弹出框 -->
-        <el-dialog title="交易记录查询" :visible.sync="recordVisible" width="80%">
-            <el-table :data="recordData" border>
-                <el-table-column prop="cardId" label="会员卡ID" align="center"></el-table-column>
-                <el-table-column prop="spendType" label="交易类型" align="center">
-                    <template slot-scope="scope">
-                        <el-tag
-                                :type="scope.row.spendType===0?'success':'danger'"
-                        >{{scope.row.spendType===0?'人民币':'积分'}}
-                        </el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="value" label="金额" align="center">
-                    <template slot-scope="scope">
-                        {{scope.row.value>0?'+'+scope.row.value:scope.row.value}}
-
-                    </template>
-                </el-table-column>
-                <el-table-column prop="time" label="时间" align="center"></el-table-column>
-            </el-table>
-            <!--底部的分页区域-->
-            <div class="pagination">
-                <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.pageIndex"
-                        :page-size="query.pageSize"
-                        :total="pageTotal"
-                        @current-change="handleRecordPageChange"
-                ></el-pagination>
-            </div>
-            i
-        </el-dialog>
-        <!--充值-->
-        <el-dialog title="充值" :visible.sync="rechargeVisible" width="30%">
-            <el-form ref="form" :model="form" :rules="rules" label-width="70px">
-                <el-form-item label="卡号" disabled="true" prop="cardId">
-                    <el-input v-model="form.cardId"></el-input>
-                </el-form-item>
-
-                <el-form-item label="额度" prop="value">
-                    <el-input v-model="form.value"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="rechargeVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveRecharge">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!--消费，为了给选择器选择时传递多个值，用@change来改变-->
-        <el-dialog title="消费" :visible.sync="consumeVisible" width="35%">
-            <el-form :model="form" :label-position="labelPosition" label-width="80px" :rules="rules">
-                <el-form-item label="卡号">
-                    {{form.cardId}}
-                </el-form-item>
-                <el-form-item label="电影票">
-                    <el-select v-model="form.movieId" placeholder="请选择电影"
-                               @change="pickMoviePriceAndIntegral" label-width="80px">
-                        <!--使用数组中不会变化的那一项作为key值,对应到项目中,即每条数据都有一个唯一的id,来标识这条数据的唯一性;
-                        使用v-for更新已渲染的元素列表时,默认用就地复用策略;列表数据修改的时候,
-                        他会根据key值去判断某个值是否修改,如果修改,则重新渲染这一项,否则复用之前的元素;-->
-                        <el-option
-                                v-for="item in movieData"
-                                :key="item.movieId"
-                                :label="item.name"
-                                :value="item.movieId">
-                            <span style="float: left">{{ item.name }}</span>
-                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.price }}</span>
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="价格">
-                    {{form.price}}
-                </el-form-item>
-                <el-form-item label="获得积分">
-                    {{form.integral}}
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="concelConsume">取 消</el-button>
-                <el-button type="primary" @click="saveConsume">确 定</el-button>
-            </span>
-        </el-dialog>
 
         <!--积分兑换对话框-->
         <el-dialog title="积分兑换" :visible.sync="integralExchangeVisible">
@@ -284,7 +145,7 @@
             </span>
         </el-dialog>
 
-        <el-dialog title="会员选择" show-close="false" close-on-press-escape="false" :visible.sync="memberVisible" >
+        <el-dialog title="会员选择" :visible.sync="memberVisible">
             <el-table
                     :data="memberData"
                     border
@@ -823,6 +684,44 @@
     .mr10 {
         text-align: center;
     }
-
+    a{
+        text-decoration: none;/*why set text-decoration as none?*/
+        position:absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);/*translate the button self*/
+        font-size: 24px;
+        background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+        background-size: 400%;
+        width: 130px;
+        height: 50px;
+        line-height: 50px;/*this means the height the text self */
+        text-align: center;
+        color: #fff;
+        text-transform: capitalize;
+        border-radius: 5px;/*make the profile round*/
+        z-index: 1;
+    }
+    a::before{
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+        background-size: 400%;
+        border-radius: 50px;
+        filter: blur(20px);
+        z-index: -1;
+    }
+    a:hover::before, a:hover{
+        animation: sun 8s infinite;
+    }
+    @keyframes sun{
+        100%{
+            background-position: -400% 0;
+        }
+    }
 
 </style>

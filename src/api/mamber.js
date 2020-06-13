@@ -37,7 +37,7 @@ modifyMember(query){
         params:query
     });
 },
-//会员登录，参数memberId、password，返回200
+//会员登录，参数memberId，返回200
 loginMember(query){
     return request({
         url:'loginMember',

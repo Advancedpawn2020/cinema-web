@@ -29,47 +29,69 @@ export default new Router({
             * () => 是定义匿名函数，这里的意思是，在函数中导入如下地址的组件
             *
             * */
-            component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
-            meta: { title: '自述文件' },
+            component: () => import( '../components/common/Home.vue'),
+            meta: {title: '背景板'},
             children: [
                 {
                     path: '/dashboard',
-                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
-                    meta: { title: '系统首页' }
+                    component: () => import( '../components/page/Dashboard.vue'),
+                    meta: {title: '系统首页'}
                 },
                 {
-                    path: '/table',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/Member.vue'),
-                    meta: { title: '会员界面' }
+                    path: '/member',
+                    component: () => import('../components/page/Member.vue'),
+                    meta: {title: '会员列表'}
+                },
+                {
+                    path: '/card',
+                    component: () => import('../components/page/card.vue'),
+                    meta: {title: '会员卡列表'},
+                },
+                {
+                    path: '/recharge',
+                    component: () => import('../components/page/recharge.vue'),
+                    meta: {title: '充值管理'}
+                }, {
+                    path: '/consume',
+                    component: () => import('../components/page/consume.vue'),
+                    meta: {title: '消费管理'}
+                }, {
+                    path: '/record',
+                    component: () => import('../components/page/record.vue'),
+                    meta: {title: '交易记录'}
+                },
+                {
+                    path: '/integral',
+                    component: () => import('../components/page/integral.vue'),
+                    meta: {title: '积分列表'}
+                },
+                {
+                    path: '/care',
+                    component: () => import('../components/page/care.vue'),
+                    meta: {title: '会员关怀'},
                 },
                 {
                     // vue-schart组件
                     path: '/charts',
-                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/Statistic.vue'),
-                    meta: { title: '统计数据' }
+                    component: () => import('../components/page/Statistic.vue'),
+                    meta: {title: '统计数据'}
                 },
                 {
                     path: '/404',
-                    component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
-                    meta: { title: '404' }
+                    component: () => import('../components/page/404.vue'),
+                    meta: {title: '404'}
                 },
                 {
                     path: '/403',
-                    component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
-                    meta: { title: '403' }
-                },
-                {
-                    path: '/card',
-                    name:'card',
-                    component: () => import(/* webpackChunkName: "card" */ '../components/page/card.vue'),
-                    meta: { title: '会员卡' }
+                    component: () => import('../components/page/403.vue'),
+                    meta: {title: '403'}
                 }
             ]
         },
         {
             path: '/login',
             component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
-            meta: { title: '登录' }
+            meta: {title: '登录'}
         },
         {
             path: '*',

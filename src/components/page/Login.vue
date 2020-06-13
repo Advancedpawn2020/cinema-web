@@ -45,7 +45,7 @@
     methods: {
         submitForm() {
 
-                /*his.$refs.formName.validate()登录验证函数，formName是form的ref属性,使用此方法前检查prop一定必须要写在<el-form-item>上面*/
+                /*this.$refs.formName.validate()登录验证函数，formName是form的ref属性,使用此方法前检查prop一定必须要写在<el-form-item>上面*/
                 this.$refs.login.validate(valid => {
                     if (valid) {
                         managerLogin(this.param).then(res => {

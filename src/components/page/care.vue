@@ -19,13 +19,6 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button
-                        type="primary"
-                        icon="el-icon-delete"
-                        class="handle-del mr10"
-                        @click="handleRegister"
-                >会员注册
-                </el-button>
                 <!--使用下拉选择菜单来选择搜索条件-->
                 <el-select v-model="query.birthdayQuery" clearable placeholder="按生日查询" class="handle-select mr10">
                     <el-option key="0" label="当天过生日" value="1"></el-option>
@@ -33,12 +26,7 @@
                     <el-option key="3" label="十天内过生日" value="10"></el-option>
                 </el-select>
                 <el-input v-model="query.name" clearable placeholder="会员名称查询" class="handle-input mr10"></el-input>
-                <a href="javascript:;" @click="handleSearch">查询</a>
-                <el-button type="danger"
-                           icon="el-icon-delete"
-                           @click="delAllSelection()" style="float:right"
-                >删除所选会员
-                </el-button>
+                <el-button type="primary" icon="el-icon-search" @click="handleSearch">查询</el-button>
             </div>
             <!--绑定memberData变量-->
             <el-table
@@ -62,30 +50,8 @@
                 <el-table-column prop="memberId" label="ID" width="180" align="center"></el-table-column>
                 <el-table-column prop="name" width="150" label="会员姓名" align="center"></el-table-column>
                 <el-table-column prop="sex" label="性别" align="center"></el-table-column>
-                <el-table-column prop="birthday" label="生日" align="center">
-                </el-table-column>
-                <el-table-column label="操作" width="400" align="center">
-                    <template slot-scope="scope">
-                        <el-button
-                                type="primary"
-                                icon="el-icon-postcard"
-                                @click="handleMember(scope.$index, scope.row)"
-                        >查看会员卡
-                        </el-button>
-                        <el-button
-                                type="warning"
-                                icon="el-icon-edit"
-                                @click="handleEdit(scope.$index, scope.row)"
-                        >修改
-                        </el-button>
-                        <!--点击时传递当前行索引和数据给函数，并在函数中赋值给form等数据，
-                        并将编辑框显示-->
-                        <el-button type="danger"
-                                   icon="el-icon-delete"
-                                   @click="handleDelete(scope.$index, scope.row)"
-                        >删除
-                        </el-button>
-                    </template>
+                <el-table-column prop="birthday" label="生日" align="center">                </el-table-column>
+                <el-table-column prop="instance" label="距离生日天数" align="center">
                 </el-table-column>
             </el-table>
             <!--底部的分页区域-->
@@ -100,81 +66,6 @@
                 ></el-pagination>
             </div>
         </div>
-
-        <!-- 编辑弹出框，拿到刚刚赋值到form的数据 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" :rules="rules" label-width="70px">
-                <el-form-item label="会员名" prop="name">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="form.password" show-password placeholder="请输入密码"></el-input>
-                </el-form-item>
-                <el-form-item label="性别" prop="sex">
-                    <el-radio v-model="form.sex" label="男">男</el-radio>
-                    <el-radio v-model="form.sex" label="女">女</el-radio>
-                </el-form-item>
-                <el-form-item label="生日" prop="birthday">
-                    <el-date-picker
-                            v-model="form.birthday"
-                            type="date"
-                            placeholder="选择日期"
-                            format="yyyy-MM-dd"
-                            value-format="yyyy-MM-dd">
-                    </el-date-picker>
-                </el-form-item>
-
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!-- 注册弹出框 -->
-        <el-dialog title="注册" :visible.sync="registerVisible" width="30%">
-            <el-form ref="form" :model="registerForm" :rules="rules" label-width="70px">
-                <el-form-item label="会员名" prop="name">
-                    <el-input v-model="registerForm.name"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="registerForm.password" show-password placeholder="请输入密码"></el-input>
-                </el-form-item>
-                <el-form-item label="性别" prop="sex">
-                    <el-radio v-model="registerForm.sex" label="男">男</el-radio>
-                    <el-radio v-model="registerForm.sex" label="女">女</el-radio>
-                </el-form-item>
-                <el-form-item label="生日" prop="birthday">
-                    <el-date-picker
-                            v-model="registerForm.birthday"
-                            value-format="yyyy-MM-dd"
-                            type="date"
-                            placeholder="选择日期"
-                            format="yyyy-MM-dd">
-                    </el-date-picker>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveRegister">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!-- 会员登录弹出框 -->
-        <el-dialog title="确认会员信息" :visible.sync="loginVisible" width="30%">
-            <el-form ref="form" :model="loginForm" :rules="rules" label-width="70px">
-                <el-form-item label="会员Id">
-                    <el-input v-model="loginForm.memberId" :disabled="true"></el-input>
-                </el-form-item>
-                <el-form-item label="会员姓名">
-                    <el-input v-model="loginForm.name" :disabled="true"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="loginMember">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -219,8 +110,10 @@
                 id: -1
             };
         },
+
         created() {
             this.getMemberData();
+
             this.openNotify();
         },
         methods: {
@@ -237,6 +130,13 @@
                 memberData(this.query).then(res => {
                     this.memberData = res.data.list;
                     this.pageTotal = res.data.pageTotal || 50;
+                    this.memberData.map((m)=>{
+                        // 转换日期格式bai
+                        var now = Date.parse(new Date());
+                        let birthday = Date.parse(new Date(m.birthday.replace(/-/g, '/'))); // "2010/08/01";
+                        m.instance = parseInt((now-birthday)/ (1000 * 60 * 60 * 24));//核心：时间戳相减，然后除以天数
+                    });
+                    this.memberData.sort((a,b)=>a.instance-b.instance);
                 });
             },
             handleRegister() {
@@ -417,22 +317,11 @@
     .handle-select {
 
         width: 150px;
-        position:absolute;
-        top: 20.5%;
-        left: 21.5%;
-        transform: translate(-50%, -50%);
-        /*设置元素不被后面元素覆盖*/
-        z-index: 1;
+
     }
 
     .handle-input {
         width: 150px;
-        display: inline-block;
-        position:absolute;
-        top: 20.5%;
-        left: 36.5%;
-        transform: translate(-50%, -50%);
-        z-index: 1;
     }
 
     .table {

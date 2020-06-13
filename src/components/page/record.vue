@@ -13,7 +13,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> {{name}}的会员卡列表
+                    <i class="el-icon-lx-cascades"></i> {{name}}的消费记录
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -26,16 +26,6 @@
                         @click="memberVisible = true"
                 >会员选择
                 </el-button>
-                <el-button
-                        type="primary"
-                        icon="el-icon-bank-card"
-                        class="handle-del mr10"
-                        @click="handleRegister"
-                >会员卡注册
-                </el-button>
-                <el-button type="primary" icon="el-icon-search" @click="handleDealSearch">交易记录查询</el-button>
-                <el-button type="success" icon="el-icon-present" @click="handleIntegralExchange">积分兑换</el-button>
-
                 <span v-if="isBirthday" class="birthday">
                       <el-tag
                               type="danger"
@@ -52,122 +42,9 @@
 
 -->
                 <!--发现这个标签，用官方的实例也会报错，但是对使用无影响，使用@change无法响应，所以加上.native使用原生事件-->
-                <el-autocomplete
-                        clearable
-                        v-model="cardQuery.cardId"
-                        :fetch-suggestions="querySearch"
-                        placeholder="请输入要查找的会员卡ID"
-                        @change.native="handleChange"
-                        @select="handleSelect"
-                        @clear="handleClear"
-                        :trigger-on-focus="false"
-                        style="float: right"
 
-                ></el-autocomplete>
-                <!--trigger-on-focus 是否在输入框 focus 时显示建议列表-->
 
             </div>
-            <!--绑定memberData变量-->
-            <el-table
-                    :data="cardData"
-                    border
-                    class="table"
-                    ref="multipleTable"
-                    header-cell-class-name="table-header"
-                    :row-class-name="tableRowClassName"
-
-            >
-                <!--select：当用户手动勾选数据行的CheckBox时，触发的事件，参数：selection，row
-                selection-change：当选项发生变化时会触发该事件，参数：selection
-                可以定义好这两个方法打印下看看什么时候会触发
-                当勾选住一个选项时，两个方法都会触发，当勾选全选时，只有selection-change方法触发，
-                两个方法传递的selection参数就是：渲染该行的对象数据-->
-                <!--Prop 是你可以在组件上注册的一些自定义 attribute。当一个值传递给一个 prop attribute 的时候
-                ，它就变成了那个组件实例的一个属性。
-                这里的prop、label、width、align都是会传递给el-table-column组件的属性
-                这里的prop属性对应列内容的字段名，会被分配到绑定到表格的data对应的数据-->
-                <el-table-column prop="cardId" label="ID" width="180" align="center"></el-table-column>
-                <el-table-column prop="balance" label="余额" align="center">
-                    <template slot-scope="scope">
-                        ￥{{scope.row.balance}}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="integral" label="积分" align="center"></el-table-column>
-                <el-table-column prop="lose" label="状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag
-                                :type="scope.row.lose===0?'success':'danger'"
-                        >{{scope.row.lose===0?'正常':'挂失'}}
-                        </el-tag>
-                        <!--<el-tag v-if="scope.row.orderStatus == 1">待付款</el-tag>
-                        <el-tag v-else-if="scope.row.orderStatus == 2">待发货</el-tag>
-                        <el-tag v-else-if="scope.row.orderStatus == 3">已发货</el-tag>
-                        <el-tag v-else-if="scope.row.orderStatus == 4">订单关闭</el-tag>
-                        <el-tag v-else-if="scope.row.orderStatus == 5">订单完成</el-tag>
-                        -->
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" width="500px" align="center">
-                    <template slot-scope="scope">
-                        <el-button
-                                type="primary"
-
-                                @click="handleRecharge(scope.$index, scope.row)"
-                                :disabled="scope.row.lose!==0"
-                        >充值
-                        </el-button>
-                        <el-button
-                                type="primary"
-                                v-if="scope.row.balance>0"
-                                @click="handleConsume(scope.$index, scope.row)"
-                                :disabled="scope.row.lose!==0"
-                        >消费
-                        </el-button>
-                        <el-button
-                                type="warning"
-                                v-if="scope.row.lose===0"
-                                @click="handleLoss(scope.$index, scope.row)"
-                        >挂失
-                        </el-button>
-                        <!--点击时传递当前行索引和数据给函数，并在函数中赋值给form等数据，
-                        并将编辑框显示-->
-                        <el-button type="danger"
-                                   v-if="scope.row.lose===1"
-                                   @click="handleCancel(scope.$index, scope.row)"
-                        >解挂
-                        </el-button>
-                        <el-button type="danger"
-                                   v-if="scope.row.lose===1"
-                                   @click="handleReissue(scope.$index, scope.row)"
-                        >补卡
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!--底部的分页区域-->
-            <div class="pagination">
-                <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.pageIndex"
-                        :page-size="query.pageSize"
-                        :total="pageTotal"
-                        @current-change="handlePageChange"
-                ></el-pagination>
-            </div>
-        </div>
-
-        <!-- 会员卡注册弹出框 -->
-        <el-dialog title="会员卡注册" :visible.sync="registerVisible" width="30%">
-            将开通新的会员卡，是否确定？
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="registerVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveRegister">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!-- 交易记录表格弹出框 -->
-        <el-dialog title="交易记录查询" :visible.sync="recordVisible" width="80%">
             <el-table :data="recordData" border>
                 <el-table-column prop="cardId" label="会员卡ID" align="center"></el-table-column>
                 <el-table-column prop="spendType" label="交易类型" align="center">
@@ -197,94 +74,11 @@
                         @current-change="handleRecordPageChange"
                 ></el-pagination>
             </div>
-            i
-        </el-dialog>
+        </div>
         <!--充值-->
-        <el-dialog title="充值" :visible.sync="rechargeVisible" width="30%">
-            <el-form ref="form" :model="form" :rules="rules" label-width="70px">
-                <el-form-item label="卡号" disabled="true" prop="cardId">
-                    <el-input v-model="form.cardId"></el-input>
-                </el-form-item>
 
-                <el-form-item label="额度" prop="value">
-                    <el-input v-model="form.value"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="rechargeVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveRecharge">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!--消费，为了给选择器选择时传递多个值，用@change来改变-->
-        <el-dialog title="消费" :visible.sync="consumeVisible" width="35%">
-            <el-form :model="form" :label-position="labelPosition" label-width="80px" :rules="rules">
-                <el-form-item label="卡号">
-                    {{form.cardId}}
-                </el-form-item>
-                <el-form-item label="电影票">
-                    <el-select v-model="form.movieId" placeholder="请选择电影"
-                               @change="pickMoviePriceAndIntegral" label-width="80px">
-                        <!--使用数组中不会变化的那一项作为key值,对应到项目中,即每条数据都有一个唯一的id,来标识这条数据的唯一性;
-                        使用v-for更新已渲染的元素列表时,默认用就地复用策略;列表数据修改的时候,
-                        他会根据key值去判断某个值是否修改,如果修改,则重新渲染这一项,否则复用之前的元素;-->
-                        <el-option
-                                v-for="item in movieData"
-                                :key="item.movieId"
-                                :label="item.name"
-                                :value="item.movieId">
-                            <span style="float: left">{{ item.name }}</span>
-                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.price }}</span>
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="价格">
-                    {{form.price}}
-                </el-form-item>
-                <el-form-item label="获得积分">
-                    {{form.integral}}
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="concelConsume">取 消</el-button>
-                <el-button type="primary" @click="saveConsume">确 定</el-button>
-            </span>
-        </el-dialog>
 
-        <!--积分兑换对话框-->
-        <el-dialog title="积分兑换" :visible.sync="integralExchangeVisible">
-            <el-form :rules="rules">
-                <el-form-item label="总积分">
-                    {{this.integralTotal}}
-                </el-form-item>
-
-                <el-transfer
-                        style="text-align: left; display: inline-block"
-                        v-model="pickIntegral"
-                        filterable
-                        :left-default-checked="[1]"
-                        :titles="['可选礼物', '已选礼物']"
-                        :button-texts="['放回', '选入']"
-                        :format="{
-        noChecked: '${total}',
-        hasChecked: '${checked}/${total}'
-      }"
-                        @change="handleChange"
-                        :data="integralExchange">
-                    <!--                        <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>-->
-                    <!--                        <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>-->
-                </el-transfer>
-
-                <el-form-item label="花费积分">
-                    {{consumeIntegral}}
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="integralExchangeVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveIntegralExchange" :disabled="beyondLimit">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <el-dialog title="会员选择" show-close="false" close-on-press-escape="false" :visible.sync="memberVisible" >
+        <el-dialog title="会员选择" :visible.sync="memberVisible">
             <el-table
                     :data="memberData"
                     border
@@ -310,17 +104,17 @@
                         @current-change="handlememberQueryPageChange"
                 ></el-pagination>
             </div>
-
-                       <span slot="footer" class="dialog-footer">
+            <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="memberVisible = false" :disabled="accessCard" >确 定</el-button>
             </span>
         </el-dialog>
+
     </div>
 </template>
 
 <script>
 
-    import {reissueCard} from "../../api/index";
+    import {memberData, reissueCard} from "../../api/index";
     import {cancelCard} from "../../api/index";
     import {loseCard} from "../../api/index";
     import {rechargeCard} from "../../api/index";
@@ -332,7 +126,6 @@
     import {exchangeIntegral} from "../../api/index";
     import {getCardIdByFuzzyQuery} from "../../api/index";
     import {getCardByCardId} from "../../api/index";
-    import {memberData} from '../../api/index';
     import bus from '../common/bus';
 
     //定义的单文件组件向外导出默认对象
@@ -360,8 +153,8 @@
                 memberData: [],
                 memberVisible:false,
                 loginForm:{},
-                cardQuery: {
-                    cardId: ''
+                cardQuery:{
+                  cardId:''
                 },
                 rules: {
                     memberId: [{required: true, message: '请输入会员名', trigger: 'blur'}],
@@ -407,7 +200,6 @@
                 registerVisible: false,
                 recordVisible: false,
                 consumeVisible: false,
-
                 integralExchangeVisible: false,
                 pageTotal: 0,
                 pickIntegral: [],
@@ -444,13 +236,11 @@
                 this.getCardData();
                 this.getMovieData();
             }
-
             //当电影信息在首页修改后，重新获取电影信息
             bus.$on('movieData-change', () => {
                 this.getMovieData();
             });
         },
-
         computed: {
             integralTotal: {
                 get() {//回调函数 当需要读取当前属性值时执行，根据相关数据计算并返回当前属性的值
@@ -501,9 +291,8 @@
                     this.memberQuery.pageTotal = res.data.pageTotal || 0;
                 });
             },
-
             handleChange() {
-                if (this.cardQuery.cardId === '') {
+                if(this.cardQuery.cardId===''){
                     this.getCardData();
                 }
             },
@@ -662,6 +451,7 @@
             // 将query数据作为参数传递给fetchData，在then后面的回调函数中操作数据
             getCardData() {
                 getCardData(this.query).then(res => {
+                    this.handleDealSearch();
                     this.cardData = res.data.list;
                     this.pageTotal = res.data.pageTotal || 0;
                 });
@@ -733,12 +523,12 @@
             },
             //会员卡id号搜索(模糊搜索),cb是一个回调函数，用于在输入框下拉框中显示数据
             querySearch(queryString, cb) {
-                if (queryString != '') {
-                    this.getPlanTypeData(queryString, (data) => {
+                if(queryString != ''){
+                    this.getPlanTypeData(queryString,(data) => {
                         let results = '';
-                        if (queryString && !data[0].noId) {  //输入框有值且有匹配数据时
+                        if(queryString && !data[0].noId){  //输入框有值且有匹配数据时
                             results = data.filter(this.createFilter(queryString))
-                        } else {   //没有匹配数据时显示自定义的字段
+                        }else {   //没有匹配数据时显示自定义的字段
                             results = data
                         }
                         cb(results);
@@ -753,27 +543,27 @@
                 };
             },
             //获取cardId数据
-            getPlanTypeData(val, fun) {
+            getPlanTypeData(val,fun) {
                 let dataArr = [];
                 let query = {
-                    'memberId': this.query.memberId,
+                    'memberId':this.query.memberId,
                     'cardId': val
                 };
                 getCardIdByFuzzyQuery(query).then(res => {    //发送请求
-                    if (res.status != 200) return false;
+                    if (res.status!=200) return false;
                     let dataList = res.data;
 
-                    if (dataList.length > 0) {
-                        dataList.forEach((item, index) => {
+                    if(dataList.length>0){
+                        dataList.forEach((item,index) => {
                             dataArr.push({
-                                'value': item.cardId,
-                                'name': item.cardId
+                                'value':item.cardId,
+                                'name':item.cardId
                             })
                         });
-                    } else {
+                    }else {
                         dataArr.push({
-                            'value': '无搜索结果',
-                            'noId': '无搜索结果',
+                            'value':'无搜索结果',
+                            'noId':'无搜索结果',
                         })
                     }
                     fun(dataArr);
@@ -781,18 +571,18 @@
             },
             //搜索选中
             handleSelect(item) {
-                if (item.name) {
+                if(item.name){
                     //this.$set(this.addForm,'jxdescribe',item.name);
                     //向服务器发出请求，查询到当前cardId的全部信息，在表格中显示
-                    getCardByCardId(this.cardQuery).then(res => {
-                        if (res.status == 200) {
+                    getCardByCardId(this.cardQuery).then(res=>{
+                        if(res.status==200){
                             this.cardData = [];
                             this.cardData.push(res.data)
                         }
                     })
                 }
             },
-            handleClear() {
+            handleClear(){
                 this.getCardData();
             }
         }
