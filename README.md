@@ -13,22 +13,31 @@
     <img src="https://img.shields.io/github/release/Advancedpawn2020/cinema-web.svg" alt="GitHub release">
   </a>
 
-本项目是电影院会员管理系统的web端，是基于Vue + Element UI 的后台管理系统解决方案的一个应用。[vue-manage-system项目地址](https://lin-xin.gitee.io/example/work/)
+本项目是电影院会员管理系统的web端，是基于Vue + Element UI 的后台管理系统解决方案的一个应用。参考后台管理模板:[vue-manage-system项目地址](https://lin-xin.gitee.io/example/work/)
 
 ## 项目截图
 
+## 项目截图
+
+### 登录页面
+
+![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/1.png?raw=true)
+
 ### 系统首页
 
-![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/interface1.png?raw=true)
+![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/2.png?raw=true)
 
 ### 会员界面
 
-![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/interface2.png?raw=true)
+![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/3.png?raw=true)
 
 ### 会员卡界面
 
-![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/interface3.png?raw=true)
+![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/4.png?raw=true)
 
+### 会员关怀
+
+![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/9.png?raw=true)
 
 ## 前言
 
