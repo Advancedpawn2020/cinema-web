@@ -43,6 +43,7 @@ export default new Router({
                     meta: {title: '会员列表'}
                 },
                 {
+                    name:'card',
                     path: '/card',
                     component: () => import('../components/page/card.vue'),
                     meta: {title: '会员卡列表'},

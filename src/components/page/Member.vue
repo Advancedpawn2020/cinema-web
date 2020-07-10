@@ -265,49 +265,43 @@
                 this.loginVisible = true;
             },
             loginMember() {
-                loginMember(this.loginForm).then(res => {
-                    let _this = this;
-                    if (res.status == 200) {
-                        this.loginVisible = false;
-                        //路由跳转到会员卡页面，这里需要将登录会员的账号信息传递过去
-                        /*
-                        * // 使用path来匹配路由，然后通过query来传递参数
-                            this.$router.push({
-                                path: '/orderDetail',
-                                query: {
-                                id: 1
-                                }
-                            });
-                            // 对应路由配置如下：
-                               {
-                                     path: '/orderDetail',
-                                     name: 'orderDetail',
-                                     component: orderDetail
-                                }
-                            // 组件中获取参数的方式：
-                            this.$route.query.id
-                        * */
-                        //如果需要在跳转路由时传参，要使用query而不是params，因为前者是get方式请求，在地址栏中显示参数的，即使刷新也会不丢失数据
-                        //如果传递的数据是对象，需要将对象转换为字符串，在接收处转换回来
+                let _this = this;
+                this.loginVisible = false;
+                //路由跳转到会员卡页面，这里需要将登录会员的账号信息传递过去
+                /*
+                * // 使用path来匹配路由，然后通过query来传递参数
+                    this.$router.push({
+                        path: '/orderDetail',
+                        query: {
+                        id: 1
+                        }
+                    });
+                    // 对应路由配置如下：
+                       {
+                             path: '/orderDetail',
+                             name: 'orderDetail',
+                             component: orderDetail
+                        }
+                    // 组件中获取参数的方式：
+                    this.$route.query.id
+                * */
+                //如果需要在跳转路由时传参，要使用query而不是params，因为前者是get方式请求，在地址栏中显示参数的，即使刷新也会不丢失数据
+                //如果传递的数据是对象，需要将对象转换为字符串，在接收处转换回来
 
-                        /*
-                        提醒一下，当使用路由参数时，例如从 /user/foo 导航到 /user/bar，
-                        原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。
-                        复用组件时，想对路由参数的变化作出响应的话，你可以简单地 watch (监测变化) $route 对象
-                        或者不想复用的话，就在父组件的router-view上加个key
-                        <router-view :key="$route.fullPath"></router-view>
-                        */
-                        this.$router.push({
-                            name: 'card',
-                            query: {
-                                data: JSON.stringify(_this.loginForm)
-                            }
-                        });
-                        this.loginForm = {};
-                    } else {
-                        this.$message.error('账号或者密码错误，请重新输入');
+                /*
+                提醒一下，当使用路由参数时，例如从 /user/foo 导航到 /user/bar，
+                原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。
+                复用组件时，想对路由参数的变化作出响应的话，你可以简单地 watch (监测变化) $route 对象
+                或者不想复用的话，就在父组件的router-view上加个key
+                <router-view :key="$route.fullPath"></router-view>
+                */
+                this.$router.push({
+                    name: 'card',
+                    query: {
+                        data: JSON.stringify(_this.loginForm)
                     }
-                })
+                });
+                this.loginForm = {};
             },
             // 触发搜索按钮，将显示的页面设为第一页
             handleSearch() {
@@ -417,7 +411,7 @@
     .handle-select {
 
         width: 150px;
-        position:absolute;
+        position: absolute;
         top: 20.5%;
         left: 21.5%;
         transform: translate(-50%, -50%);
@@ -428,7 +422,7 @@
     .handle-input {
         width: 150px;
         display: inline-block;
-        position:absolute;
+        position: absolute;
         top: 20.5%;
         left: 36.5%;
         transform: translate(-50%, -50%);
@@ -454,25 +448,27 @@
         width: 40px;
         height: 40px;
     }
-    a{
-        text-decoration: none;/*why set text-decoration as none?*/
-        position:absolute;
+
+    a {
+        text-decoration: none; /*why set text-decoration as none?*/
+        position: absolute;
         top: 20%;
         left: 50%;
-        transform: translate(-50%, -50%);/*translate the button self*/
+        transform: translate(-50%, -50%); /*translate the button self*/
         font-size: 24px;
         background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
         background-size: 400%;
         width: 100px;
         height: 50px;
-        line-height: 50px;/*this means the height the text self */
+        line-height: 50px; /*this means the height the text self */
         text-align: center;
         color: #fff;
         text-transform: capitalize;
-        border-radius: 5px;/*make the profile round*/
+        border-radius: 5px; /*make the profile round*/
         z-index: 1;
     }
-    a::before{
+
+    a::before {
         content: "";
         position: absolute;
         left: -5px;
@@ -485,11 +481,13 @@
         filter: blur(20px);
         z-index: -1;
     }
-    a:hover::before, a:hover{
+
+    a:hover::before, a:hover {
         animation: sun 8s infinite;
     }
-    @keyframes sun{
-        100%{
+
+    @keyframes sun {
+        100% {
             background-position: -400% 0;
         }
     }
