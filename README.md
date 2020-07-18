@@ -17,8 +17,6 @@
 
 ## 项目截图
 
-## 项目截图
-
 ### 登录页面
 
 ![Image text](https://github.com/Advancedpawn2020/cinema/blob/master/src/main/webapp/projectimg/1.png?raw=true)
